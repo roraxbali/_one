@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WELCOME BY RORAXBALI</title>
-    <!-- Mengambil font bergaya teknologi/cyber modern dari Google Fonts -->
+    <title>TERMINAL ACCESS</title>
+    <!-- Mengambil font khusus terminal komputer -->
     <link rel="preconnect" href="https://googleapis.com">
     <link rel="preconnect" href="https://gstatic.com" crossorigin>
-    <link href="https://googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
     
     <style>
         * {
@@ -19,140 +19,189 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            /* Gambar latar belakang sikit teknologi gelap premium dengan lapisan gradasi hitam solid */
-            background: linear-gradient(rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.92)), 
-                        url('https://unsplash.com') no-repeat center center fixed;
-            background-size: cover;
-            font-family: 'Share Tech Mono', monospace;
-            overflow: hidden;
+            /* Latar belakang gelap khas Kali Linux / Ubuntu Server */
+            background-color: #0f0f16;
+            font-family: 'Fira Code', monospace;
             display: flex;
             justify-content: center;
             align-items: center;
-        }
-
-        /* Kotak Konsol Panel Utama */
-        .terminal-panel {
-            position: relative;
-            z-index: 10;
-            width: 90%;
-            max-width: 550px;
-            background: rgba(10, 10, 10, 0.95);
-            border: 1px solid #ff003c;
-            box-shadow: 0 12px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(255, 0, 60, 0.2);
-            padding: 45px 30px;
-            border-radius: 8px;
-            text-align: center;
-            backdrop-filter: blur(10px); /* Efek kaca buram premium di latar belakang */
-        }
-
-        /* Ornamen Garis Atas Windows */
-        .panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(255, 0, 60, 0.2);
-            padding-bottom: 15px;
-            margin-bottom: 35px;
-        }
-
-        .panel-dots {
-            display: flex;
-            gap: 8px;
-        }
-
-        .dot {
-            width: 11px;
-            height: 11px;
-            border-radius: 50%;
-            background-color: #ff003c;
-        }
-
-        .dot:nth-child(2) { background-color: #ffaa00; }
-        .dot:nth-child(3) { background-color: #00ff66; }
-
-        .panel-title {
-            color: #ff003c;
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        /* JUDUL UTAMA GAYA CYBER BLACKHAT */
-        h1 {
-            margin: 0 0 10px 0;
-            font-size: 38px;
             color: #ffffff;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
         }
 
-        /* Sub-Judul Detail */
-        .subtitle {
-            font-size: 14px;
-            color: #00ff66; /* Warna Hijau Terminal */
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 35px;
-            text-shadow: 0 0 8px rgba(0, 255, 102, 0.3);
+        /* Jendela Terminal Kali Linux */
+        .kali-terminal {
+            width: 92%;
+            max-width: 500px;
+            background-color: #1c1c24;
+            border: 1px solid #38384d;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
         }
 
-        /* Ornamen Bingkai Tengah */
-        .center-hud {
-            width: 100%;
-            border: 1px dashed rgba(255, 0, 60, 0.3);
-            background: rgba(0, 0, 0, 0.5);
-            padding: 25px;
-            margin-bottom: 20px;
-            border-radius: 4px;
+        /* Batang Atas Window (Title Bar Kali Linux) */
+        .terminal-header {
+            background-color: #15151c;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            border-bottom: 1px solid #282837;
         }
 
-        /* Teks Berjalan/Animasi Simulasi Status Sistem */
-        .status-text {
+        /* Tiga tombol bulat kiri atas */
+        .window-buttons {
+            display: flex;
+            gap: 7px;
+        }
+
+        .w-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ff5f56; /* Merah close */
+        }
+        .w-btn.minimize { background-color: #ffbd2e; } /* Kuning */
+        .w-btn.maximize { background-color: #27c93f; } /* Hijau */
+
+        /* Judul di tengah title bar */
+        .terminal-title {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
             font-size: 13px;
-            color: #a3a3a3;
-            line-height: 1.8;
-            letter-spacing: 1px;
-        }
-
-        .highlight-green {
-            color: #00ff66;
+            color: #8c8ca3;
             font-weight: bold;
         }
 
-        .highlight-red {
-            color: #ff003c;
+        /* Isi Dalam Terminal */
+        .terminal-body {
+            padding: 25px 20px;
+        }
+
+        /* Teks Prompt Prompt Kali ($ root@kali) */
+        .prompt-line {
+            color: #8c8ca3;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .user-tag {
+            color: #3498db; /* Biru user */
             font-weight: bold;
+        }
+
+        .host-tag {
+            color: #2ecc71; /* Hijau host */
+            font-weight: bold;
+        }
+
+        /* Teks Perintah/Instruksi Utama */
+        .instruction {
+            font-size: 15px;
+            color: #ffffff;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        /* Kotak Tempat Tautan / Link Anda */
+        .link-container {
+            width: 100%;
+            background-color: #0b0b0f;
+            border: 1px solid #2d2d3d;
+            border-radius: 6px;
+            padding: 14px;
+            font-size: 14px;
+            color: #2ecc71; /* Warna hijau teks link agar menonjol */
+            word-break: break-all;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Tombol Salin Gaya Minimalis Konsol */
+        .btn-action {
+            width: 100%;
+            background-color: #34495e;
+            color: #ffffff;
+            border: none;
+            padding: 14px;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background 0.2s ease;
+            text-transform: uppercase;
+        }
+
+        .btn-action:hover {
+            background-color: #2c3e50;
+        }
+
+        /* Notifikasi Sukses Kecil di Bawah */
+        .toast {
+            display: none;
+            text-align: center;
+            color: #2ecc71;
+            font-size: 13px;
+            margin-top: 15px;
         }
     </style>
 </head>
 <body>
 
-    <!-- Panel Utama Halaman Tampilan RORAXBALI -->
-    <div class="terminal-panel">
-        <div class="panel-header">
-            <div class="panel-dots">
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
+    <!-- Struktur Utama Jendela Kali Linux -->
+    <div class="kali-terminal">
+        <!-- Bagian Header Window -->
+        <div class="terminal-header">
+            <div class="window-buttons">
+                <div class="w-btn"></div>
+                <div class="w-btn minimize"></div>
+                <div class="w-btn maximize"></div>
             </div>
-            <div class="panel-title">> GATEWAY_SECURE_MAIN</div>
+            <div class="terminal-title">roraxbali@terminal:~</div>
         </div>
 
-        <!-- Bagian Identitas/Nama Utama -->
-        <h1>RORAXBALI</h1>
-        <div class="subtitle">CYBER NETWORK SYSTEM</div>
-        
-        <!-- Ornamen Info Display Tengah -->
-        <div class="center-hud">
-            <div class="status-text">
-                $ CONNECTION: <span class="highlight-green">SECURE</span><br>
-                $ STATUS: <span class="highlight-green">ONLINE</span><br>
-                $ ENCRYPTION: <span class="highlight-green">AES-256 ACTIVE</span><br>
-                <span class="highlight-red">> ACCESS GRANTED <</span>
+        <!-- Bagian Dalam Konsol -->
+        <div class="terminal-body">
+            <!-- Penanda Baris Konsol -->
+            <div class="prompt-line">
+                <span class="user-tag">roraxbali</span>@<span class="host-tag">kali</span>:~$ system_init
             </div>
+
+            <!-- Pesan Perintah Sesuai Permintaan Anda -->
+            <div class="instruction">
+                Silahkan salin link di bawah ini dan buka melalui browser Google Chrome atau Safari Anda untuk melanjutkan.
+            </div>
+
+            <!-- KOTAK LINK (Silakan ganti teks URL di bawah ini dengan link domain Anda) -->
+            <div class="link-container" id="targetLink">https://link-domain-anda-disini.com</div>
+
+            <!-- Tombol Salin -->
+            <button class="btn-action" onclick="salinTautan()">Salin Link</button>
+
+            <!-- Pesan Berhasil Salin -->
+            <div class="toast" id="notifSukses">✓ Berhasil disalin! Silakan tempel di Chrome/Safari.</div>
         </div>
     </div>
 
+    <script>
+        function salinTautan() {
+            const teksLink = document.getElementById('targetLink').innerText;
+            const notif = document.getElementById('notifSukses');
+
+            // Proses menyalin teks otomatis ke memori HP
+            navigator.clipboard.writeText(teksLink).then(() => {
+                notif.style.display = 'block';
+                // Sembunyikan notifikasi setelah 4 detik
+                setTimeout(() => {
+                    notif.style.display = 'none';
+                }, 4000);
+            }).catch(err => {
+                console.error('Gagal menyalin otomatis: ', err);
+                alert('Gagal menyalin otomatis. Silakan tekan lama teks link hijau di atas untuk menyalin manual.');
+            });
+        }
+    </script>
 </body>
 </html>
