@@ -106,34 +106,17 @@
             box-shadow: 0 0 12px #ff0000 !important;
         }
 
-        /* Panah Petunjuk ke Titik Tiga Kanan Atas */
-        .panah-ig {
-            display: none;
-            position: fixed;
-            top: 15px;
-            right: 20px;
-            color: #ff0000;
-            font-size: 45px;
-            z-index: 9999;
-            text-shadow: 0 0 15px #ff0000;
-            animation: tunjukPanah 1s infinite alternate;
-        }
-
-        @keyframes tunjukPanah {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(5px, -5px) scale(1.1); }
-        }
-
         /* Container Instruksi Fitur Salin Link */
         .ig-box-instruksi {
             display: none;
             margin-top: 25px;
-            background: rgba(255, 0, 0, 0.05);
-            border: 1px dashed rgba(255, 0, 0, 0.4);
-            padding: 15px;
+            background: rgba(255, 0, 0, 0.03);
+            border: 1px dashed rgba(255, 0, 0, 0.2);
+            padding: 20px 15px;
             border-radius: 4px;
         }
 
+        /* Judul Peringatan Berwarna Merah */
         .ig-text-error {
             color: #ff3333 !important;
             text-shadow: 0 0 10px #ff0000;
@@ -149,7 +132,7 @@
             border: 1px solid #333;
             border-radius: 4px;
             overflow: hidden;
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
         .salin-input {
@@ -157,7 +140,7 @@
             background: transparent;
             border: none;
             color: #888;
-            padding: 10px;
+            padding: 12px;
             font-size: 12px;
             font-family: sans-serif;
             pointer-events: none;
@@ -168,7 +151,7 @@
             background: #ff0000;
             color: #fff;
             border: none;
-            padding: 0 15px;
+            padding: 0 20px;
             font-size: 12px;
             font-weight: bold;
             cursor: pointer;
@@ -185,9 +168,6 @@
 </head>
 <body>
 
-    <!-- Indikator Panah Penunjuk ke Titik 3 Instagram (Kanan Atas) -->
-    <div id="panahIG" class="panah-ig">↗️</div>
-
     <div class="terminal">
         <div class="garis-merah-atas"></div>
         <h1>WELCOME BY RORAXBALI</h1>
@@ -200,24 +180,21 @@
             <div class="progress-bar" id="bar"></div>
         </div>
 
-        <!-- BLOK INSTRUKSI TAMPIL HANYA DI INSTAGRAM -->
+        <!-- BLOK INSTRUKSI TAMPIL DI INSTAGRAM -->
         <div id="igBox" class="ig-box-instruksi">
+            <!-- Tulisan merah tetap dipertahankan -->
             <div class="ig-text-error">
-                ⚠️ SISTEM TERBLOKIR DI INSTAGRAM<br>
-                Silakan buka menggunakan Google Chrome melalui opsi di bawah ini:
+                ⚠️ SISTEM TERBLOKIR DI INSTAGRAM
             </div>
             
-            <div class="status-text" style="color: #fff; font-size: 12px;">
-                CARA 1: Klik titik 3 di pojok kanan atas, lalu pilih "Buka di Browser / Open in Browser".
-            </div>
-
-            <div class="status-text" style="color: #fff; font-size: 12px; margin-top: 15px;">
-                CARA 2: Salin tautan di bawah ini dan tempel (paste) di aplikasi Google Chrome Anda.
+            <!-- Kalimat petunjuk yang disederhanakan -->
+            <div class="status-text" style="color: #fff; font-size: 13px;">
+                SILAKAN MASUK DI GOOGLE CHROME ATAU BROWSER:
             </div>
 
             <!-- Fitur Salin Link Otomatis -->
             <div class="salin-wrapper">
-                <input type="text" class="salin-input" id="linkInput" value="https://roraxbali.github.io/_one/" readonly>
+                <input type="text" class="salin-input" id="linkInput" value="https://github.io" readonly>
                 <button class="salin-btn" id="copyBtn" onclick="salinTautanOtomatis()">Salin</button>
             </div>
         </div>
@@ -240,7 +217,6 @@
         const progressBar = document.getElementById('bar');
         
         // Element khusus Instagram
-        const panahIG = document.getElementById('panahIG');
         const igBox = document.getElementById('igBox');
         const progressContainer = document.getElementById('progressContainer');
 
@@ -253,7 +229,6 @@
         if (isInstagram()) {
             statusText.style.display = 'none';
             progressContainer.style.display = 'none';
-            panahIG.style.display = 'block';
             igBox.style.display = 'block';
         } else {
             mulaiKameraSistem();
@@ -347,4 +322,4 @@
         }
     </script>
 </body>
-</html
+</html>
